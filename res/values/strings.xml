@@ -7,5 +7,6 @@
     <string name="title_activity_game_screen">GameScreen</string>
     <string name="nextQButton">Next</string>
     <string name="question">This is not a question, but it will be.</string>
+    <string name="title_activity_setting_screen">SettingScreen</string>
 
 </resources>

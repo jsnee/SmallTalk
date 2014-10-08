@@ -26,6 +26,14 @@
             android:name=".GameScreen"
             android:label="@string/title_activity_game_screen" >
         </activity>
+        <activity
+            android:name=".SettingScreen"
+            android:label="@string/title_activity_setting_screen"
+            android:parentActivityName=".GameScreen" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.smalltalk.GameScreen" />
+        </activity>
     </application>
 
 </manifest>
