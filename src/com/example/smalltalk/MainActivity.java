@@ -3,11 +3,13 @@ package com.example.smalltalk;
 import java.io.IOException;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.media.MediaRecorder;
 import android.media.audiofx.Visualizer;
 import android.media.audiofx.Visualizer.OnDataCaptureListener;
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
@@ -26,23 +28,31 @@ public class MainActivity extends Activity {
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.main, menu);
-		return true;
+	    MenuInflater inflater = getMenuInflater();
+	    inflater.inflate(R.menu.main, menu);
+	    return true;
 	}
 	
 	
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		// Handle action bar item clicks here. The action bar will
-		// automatically handle clicks on the Home/Up button, so long
-		// as you specify a parent activity in AndroidManifest.xml.
-		int id = item.getItemId();
-		if (id == R.id.action_settings) {
-			return true;
-		}
-		return super.onOptionsItemSelected(item);
+		// Handle action bar item 
+	     switch(item.getItemId())
+	        {
+	            case  R.id.settings:
+	            	//Settings selected
+	            	startActivity(new Intent(this, SettingScreen.class));
+	                return true;
+	            case  R.id.addQuestion:
+	            	//+ Add Question selected
+	            	
+	                return true;	                
+	            default:
+	                return super.onOptionsItemSelected(item);
+
+	        }
+	     
 	}
 
 	public void onClick(View v) {

@@ -8,9 +8,48 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.example.smalltalk.SettingScreen" >
 
-    <TextView
+    <Button
+        android:id="@+id/noiseLevel"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="38dp"
+        android:text="Noise Level" />
+
+    <Button
+        android:id="@+id/turnOffAfter"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/noiseLevel"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="24dp"
+        android:text="Turn me off after" />
+
+    <Button
+        android:id="@+id/sounds"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/hello_world" />
+        android:layout_below="@+id/turnOffAfter"
+        android:layout_alignLeft="@+id/button2"
+        android:layout_marginTop="24dp"
+        android:text="Sounds" />
+    
+     <Switch
+        android:id="@+id/switch1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/sounds"
+        android:layout_alignBottom="@+id/sounds"
+        android:layout_alignRight="@+id/turnOffAfter"/>
+
+     <Button
+         android:id="@+id/timer"
+         android:layout_width="fill_parent"
+         android:layout_height="wrap_content"
+         android:layout_alignLeft="@+id/sounds"
+         android:layout_below="@+id/sounds"
+         android:layout_marginTop="24dp"
+         android:text="Timer" />
 
 </RelativeLayout>
