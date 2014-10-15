@@ -30,8 +30,7 @@ public class GameScreen extends Activity {
 		setContentView(R.layout.activity_game_screen);
 
 		_progressBar = (ProgressBar)findViewById (R.id.circularProgressBar);
-
-		_progressBar.setProgress(85);
+		_progressBar.setProgress(0);
 		
 		startListening();
 	}
@@ -59,6 +58,7 @@ public class GameScreen extends Activity {
 		mediaRecorder.reset();
 		mediaRecorder.release();
 		audioValue = 0;
+		_progressBar.setProgress(0);
 	}
 	
 	protected void startListening() {
