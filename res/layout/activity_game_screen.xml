@@ -30,7 +30,8 @@
             android:id="@+id/imageButton1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/mic" />
+            android:src="@drawable/mic"
+            android:onClick="toggleListening" />
 
         <ImageButton
             android:id="@+id/imageButton2"

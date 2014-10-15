@@ -8,8 +8,8 @@ import android.media.MediaRecorder;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 import android.widget.Toast;
 
 public class GameScreen extends Activity {
@@ -18,6 +18,7 @@ public class GameScreen extends Activity {
 	protected static int audioValue = 0;
 	protected static int maxAudioValue = 500;
 	protected static ProgressBar _progressBar;
+	protected static boolean isListening = false;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -31,7 +32,36 @@ public class GameScreen extends Activity {
 		_progressBar = (ProgressBar)findViewById (R.id.circularProgressBar);
 
 		_progressBar.setProgress(85);
-
+		
+		startListening();
+	}
+	
+	public void toggleListening() {
+		if (isListening) {
+			stopListening();
+		} else {
+			startListening();
+		}
+	}
+	
+	public void toggleListening(View view) {
+		toggleListening();
+	}
+	
+	public void onDestroy() {
+		super.onDestroy();
+		stopListening();
+	}
+	
+	protected void stopListening() {
+		isListening = false;
+		mediaRecorder.stop();
+		mediaRecorder.reset();
+		mediaRecorder.release();
+		audioValue = 0;
+	}
+	
+	protected void startListening() {
 		mediaRecorder = new MediaRecorder();
 		mediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
 		mediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
@@ -45,12 +75,13 @@ public class GameScreen extends Activity {
 		try {
 			System.out.println("Start Recording...");
 			mediaRecorder.start();
+			isListening = true;
 		} catch (Exception e) {
 			Toast.makeText(getApplicationContext(), "Error :: " + e.getMessage(), Toast.LENGTH_LONG).show();
 		}
 		new Thread(new Runnable() {
 			public void run() {
-				while(true) {
+				while(isListening) {
 					audioValue = mediaRecorder.getMaxAmplitude();
 					int progressLevel = audioValue / maxAudioValue;
 					progressLevel = (progressLevel > 100 ? 100:progressLevel);
@@ -64,6 +95,8 @@ public class GameScreen extends Activity {
 			}
 		}).start();
 	}
+	
+	
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
