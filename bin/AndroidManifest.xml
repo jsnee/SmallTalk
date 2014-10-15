@@ -7,6 +7,7 @@
     <uses-sdk
         android:minSdkVersion="19"
         android:targetSdkVersion="19" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
 
     <application
         android:allowBackup="true"
@@ -24,7 +25,11 @@
         </activity>
         <activity
             android:name=".GameScreen"
-            android:label="@string/title_activity_game_screen" >
+            android:label="@string/title_activity_game_screen"
+            android:parentActivityName=".MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.smalltalk.MainActivity" />
         </activity>
         <activity
             android:name=".SettingScreen"

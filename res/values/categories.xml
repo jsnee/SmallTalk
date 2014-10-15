@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="categories">
+        <item>This or That</item>
+        <item>Favorites</item>
+        <item>Comedy</item>
+        <item>Thought Provoking</item>
+        <item>Controversial</item>
+    </string-array>
+
+</resources>

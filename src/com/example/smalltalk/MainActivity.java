@@ -1,29 +1,52 @@
 package com.example.smalltalk;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.media.MediaRecorder;
-import android.media.audiofx.Visualizer;
-import android.media.audiofx.Visualizer.OnDataCaptureListener;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 //comment
 public class MainActivity extends Activity {
 
 	protected static int audioValue = 0;
-	private MediaRecorder mRecorder;
-	private String mFilename;
+	private ArrayList<QuestionCategory> questionCategories = new ArrayList<QuestionCategory>();
+	public ArrayAdapter<QuestionCategory> categoryAdapter;
+	public final static String EXTRA_CATEGORY = "com.example.smalltalk.CATEGORY";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+		categoryAdapter = new ArrayAdapter<QuestionCategory>(this, android.R.layout.simple_list_item_1, questionCategories);
+		loadQuestionCategories();
+		ListView categoryListView = (ListView) findViewById(R.id.mainCategoryList);
+		categoryListView.setAdapter(categoryAdapter);
+		categoryListView.setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+				String selectedCategory = ((TextView)view).getText().toString();
+				if (QuestionCategory.isQuestionCategoryTitle(selectedCategory)) {
+					//PUT ADD NEW CATEGORY CODE HERE
+				} else {
+					initializeGameScreen(selectedCategory);
+					//Intent intent = new Intent(this, GameScreen.class);
+				}
+			}
+			
+		});
 	}
 
 	@Override
@@ -33,7 +56,15 @@ public class MainActivity extends Activity {
 	    return true;
 	}
 	
-	
+	public void loadQuestionCategories() {
+		//String[] categories = getResources().getStringArray(R.array.categories);
+		for (String eachCategory : getResources().getStringArray(R.array.categories)) {
+			questionCategories.add(new QuestionCategory(eachCategory));
+			System.out.println(eachCategory);
+		}
+		questionCategories.add(QuestionCategory.getAddYourOwnCategory());
+		categoryAdapter.notifyDataSetChanged();
+	}
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
@@ -54,40 +85,11 @@ public class MainActivity extends Activity {
 	        }
 	     
 	}
-
-	public void onClick(View v) {
-		mRecorder = new MediaRecorder();
-		mRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
-		mRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
-		mRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
-		mRecorder.setOutputFile(mFilename);
-		try {
-			mRecorder.prepare();
-		} catch (IllegalStateException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		try {
-			System.out.println("****");
-			mRecorder.start();
-		} catch (Exception e) {
-			Toast.makeText(getApplicationContext(), "Error :: " + e.getMessage(), Toast.LENGTH_LONG).show();
-		}
-
+	
+	protected void initializeGameScreen(String selectedCategory) {
+		Intent intent = new Intent(this, GameScreen.class);
+		intent.putExtra(EXTRA_CATEGORY, selectedCategory);
+		startActivity(intent);
 	}
 
-	OnDataCaptureListener datacaptureListener = new OnDataCaptureListener() {
-		@Override
-		public void onWaveFormDataCapture(Visualizer visualizer, byte[] bytes,int samplingRate) {
-			System.out.println("1--->");
-			//mVisualizerView.updateVisualizer(bytes);
-		}
-
-		public void onFftDataCapture(Visualizer visualizer, byte[] bytes, int samplingRate) {
-			System.out.println("2--->");
-			//mVisualizerView.updateVisualizer(bytes);
-			audioValue = visualizer.getFft(bytes);
-		}
-	};
 }
