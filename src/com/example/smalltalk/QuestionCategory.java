@@ -51,7 +51,7 @@ public class QuestionCategory {
 	
 	public static boolean isQuestionCategoryTitle(String title) {
 		boolean result = false;
-		if (title.equals(QuestionCategory.addNewCategoryName)) {
+		if (title.equals(QuestionCategory.getAddYourOwnCategory().getCategoryTitle())) {
 			result = true;
 		}
 		return result;
