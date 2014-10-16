@@ -1,6 +1,7 @@
 package com.example.smalltalk;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -19,6 +20,7 @@ public class GameScreen extends Activity {
 	protected static int maxAudioValue = 500;
 	protected static ProgressBar _progressBar;
 	protected static boolean isListening = false;
+	protected ArrayList<String> questions = new ArrayList<String>();
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -28,8 +30,13 @@ public class GameScreen extends Activity {
 		//TextView textView = (TextView) findViewById(R.id.textView1);
 		//textView.setText(selectedCategory.categoryTitleAsArray(), 0, selectedCategory.categoryTitleAsArray().length);
 		setContentView(R.layout.activity_game_screen);
+		this.setTitle(selectedCategory.getCategoryTitle());
+		
+		for (String eachQuestion : getResources().getStringArray(getResources().getIdentifier(selectedCategory.getCategoryName(), "array", "com.example.smalltalk"))) {
+			questions.add(eachQuestion);
+		}
 
-		_progressBar = (ProgressBar)findViewById (R.id.circularProgressBar);
+		_progressBar = (ProgressBar) findViewById(R.id.circularProgressBar);
 		_progressBar.setProgress(0);
 		
 		startListening();

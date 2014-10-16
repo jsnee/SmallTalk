@@ -41,6 +41,7 @@ public class MainActivity extends Activity {
 				if (QuestionCategory.isQuestionCategoryTitle(selectedCategory)) {
 					//PUT ADD NEW CATEGORY CODE HERE
 				} else {
+					System.out.println(selectedCategory);
 					initializeGameScreen(selectedCategory);
 					//Intent intent = new Intent(this, GameScreen.class);
 				}
