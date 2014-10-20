@@ -14,18 +14,18 @@ public class SplashScreen extends Activity {
             public void run(){
                 try{
                     int logoTimer = 0;
-                    while(logoTimer < 5000){
+                    while(logoTimer < 5000){ //5000 = 5 sec
                         sleep(100);
                         logoTimer = logoTimer +100;
                     };
                     
             		//setContentView(R.layout.activity_main);
-
+                    
+                    //after 5 sec, it will take user to app's home screen
 	            	startActivity(new Intent("com.example.homeScreen"));
                 } 
                  
                 catch (InterruptedException e) {
-                    // TODO Auto-generated catch block
                     e.printStackTrace();
                 }
                  
