@@ -21,7 +21,7 @@ public class SplashScreen extends Activity {
                     
             		//setContentView(R.layout.activity_main);
                     
-                    //after 5 sec, it will take user to app's home screen
+                    //after 3 sec, it will take user to app's home screen
 	            	startActivity(new Intent("com.example.homeScreen"));
                 } 
                  
