@@ -14,7 +14,7 @@ public class SplashScreen extends Activity {
             public void run(){
                 try{
                     int logoTimer = 0;
-                    while(logoTimer < 5000){ //5000 = 5 sec
+                    while(logoTimer < 3000){ //3000 = 3 sec
                         sleep(100);
                         logoTimer = logoTimer +100;
                     };
