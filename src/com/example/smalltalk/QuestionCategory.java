@@ -4,7 +4,8 @@ public class QuestionCategory {
 	
 	public String categoryName;
 	public String categoryTitle;
-	public static final String addNewCategoryName = "ADD-NEW-CAT";
+	public static final String randomCategoryName = "RAND-CAT";
+	public static final String randomCategoryTitle = "Randomize!";
 	
 	public QuestionCategory(String categoryName, String categoryTitle) {
 		this.categoryName = categoryName;
@@ -13,8 +14,8 @@ public class QuestionCategory {
 
 	public QuestionCategory(String categoryTitle) {
 		this.categoryTitle = categoryTitle;
-		if (categoryTitle.equals("+ Add Your Own")) {
-			this.categoryName = QuestionCategory.addNewCategoryName;
+		if (categoryTitle.equals(randomCategoryTitle)) {
+			this.categoryName = QuestionCategory.randomCategoryName;
 		} else {
 			this.categoryName = categoryTitle.replaceAll(" ", "_");
 		}
@@ -45,13 +46,13 @@ public class QuestionCategory {
 		return this.getCategoryTitle().toCharArray();
 	}
 	
-	public static QuestionCategory getAddYourOwnCategory() {
-		return new QuestionCategory(QuestionCategory.addNewCategoryName, "+ Add Your Own");
+	public static QuestionCategory getRandomCategory() {
+		return new QuestionCategory(QuestionCategory.randomCategoryName, randomCategoryTitle);
 	}
 	
 	public static boolean isQuestionCategoryTitle(String title) {
 		boolean result = false;
-		if (title.equals(QuestionCategory.getAddYourOwnCategory().getCategoryTitle())) {
+		if (title.equals(QuestionCategory.getRandomCategory().getCategoryTitle())) {
 			result = true;
 		}
 		return result;

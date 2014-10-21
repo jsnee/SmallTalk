@@ -3,6 +3,7 @@ package com.example.smalltalk;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.widget.RelativeLayout;
 
 public class SplashScreen extends Activity {
 	@Override

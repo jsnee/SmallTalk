@@ -1,11 +1,9 @@
 package com.example.smalltalk;
 
-import java.io.IOException;
 import java.util.ArrayList;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.media.MediaRecorder;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -16,7 +14,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
+//comment
 //comment
 public class MainActivity extends Activity {
 
@@ -63,7 +61,7 @@ public class MainActivity extends Activity {
 			questionCategories.add(new QuestionCategory(eachCategory));
 			System.out.println(eachCategory);
 		}
-		questionCategories.add(QuestionCategory.getAddYourOwnCategory());
+		questionCategories.add(QuestionCategory.getRandomCategory());
 		categoryAdapter.notifyDataSetChanged();
 	}
 

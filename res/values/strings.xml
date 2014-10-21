@@ -10,5 +10,7 @@
     <string name="title_activity_setting_screen">SettingScreen</string>
     <string name="addQuestion">+ Add Questions</string>
     <string name="title_activity_question_wframe">QuestionWFrame</string>
+    <string name="dialog_noisecap_cancel">Skip this step</string>
+    <string name="dialog_capturing_noise">Please wait while we detect the ambient noise...</string>
 
 </resources>

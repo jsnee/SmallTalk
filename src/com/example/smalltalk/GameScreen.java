@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 import android.app.Activity;
-import android.app.AlertDialog;
+import android.app.DialogFragment;
 import android.content.Intent;
 import android.media.MediaRecorder;
 import android.os.Bundle;
@@ -19,14 +19,23 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class GameScreen extends Activity {
+import com.example.smalltalk.dialogs.AmbientNoiseCaptureDialogFragment;
+
+public class GameScreen extends Activity implements AmbientNoiseCaptureDialogFragment.AmbientNoiseCaptureDialogListener {
+
+	protected static SettingsSingleton appSettings = SettingsSingleton.getSettings();
 
 	protected MediaRecorder mediaRecorder;
 	protected static int audioValue = 0;
-	protected static int maxAudioValue = 500;
+	protected static int maxAudioValue = 50000;
+	protected static long beginDetectionTime;
 	protected static ProgressBar _progressBar;
+	protected static int quietTickCounts = 0;
+	protected static boolean wasLastTickQuiet = false;
+	protected boolean isDetectingNoise = false;
 	protected boolean isListening = false;
 	protected boolean isPlaying = false;
+	protected static DialogFragment noiseDetectionDialog;
 	protected ArrayList<String> questions = new ArrayList<String>();
 	protected int currentQuestionIndex = 0;
 
@@ -46,9 +55,19 @@ public class GameScreen extends Activity {
 
 		startListening();
 		updateQuestionDisplay();
+
+		beginDetectionTime = System.currentTimeMillis();
+		appSettings.setWeightedAverageAudioValue(mediaRecorder.getMaxAmplitude());
+
+		isDetectingNoise = true;
+		noiseDetectionDialog = new AmbientNoiseCaptureDialogFragment();
+		noiseDetectionDialog.show(getFragmentManager(), "noise");
 	}
 
 	public void advanceQuestion() {
+		if (!isPlaying) {
+			//return;
+		}
 		if (questions.size() > currentQuestionIndex + 1) {
 			currentQuestionIndex++;
 			updateQuestionDisplay();
@@ -82,6 +101,7 @@ public class GameScreen extends Activity {
 	}
 
 	public void startPlaying() {
+		isPlaying = true;
 		shuffleQuestions();
 		currentQuestionIndex = 0;
 		updateQuestionDisplay();
@@ -124,6 +144,11 @@ public class GameScreen extends Activity {
 		_progressBar.setProgress(0);
 	}
 
+	protected static boolean isQuiet() {
+		double thresholdRatio = audioValue / maxAudioValue * 100.0;
+		return (thresholdRatio > appSettings.getThresholdRatio());
+	}
+
 	protected void startListening() {
 		mediaRecorder = new MediaRecorder();
 		mediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
@@ -149,6 +174,36 @@ public class GameScreen extends Activity {
 					int progressLevel = audioValue / maxAudioValue;
 					progressLevel = (progressLevel > 100 ? 100:progressLevel);
 					_progressBar.setProgress(progressLevel);
+					if (isDetectingNoise) {
+						appSettings.refineWeightedAverageAudioValue(audioValue);
+
+						if (System.currentTimeMillis() > beginDetectionTime + 10000) {
+							isDetectingNoise = false;
+							maxAudioValue = appSettings.getWeightedAverageAudioValue() / 2;
+							noiseDetectionDialog.dismiss();
+						}
+					} else {
+						if (isQuiet()) {
+							quietTickCounts++;
+							wasLastTickQuiet = true;
+							int quietSeconds = quietTickCounts * 100 / 1000;
+							if (quietSeconds >= appSettings.getTimerSeconds()) {
+								quietTickCounts = 0;
+								wasLastTickQuiet = false;
+								runOnUiThread(new Runnable() {
+									@Override
+									public void run() {
+										advanceQuestion();
+									}
+								});
+							}
+						} else {
+							if (!wasLastTickQuiet) {
+								quietTickCounts = 0;
+							}
+							wasLastTickQuiet = false;
+						}
+					}
 					try {
 						Thread.sleep(100);
 					} catch (InterruptedException e) {
@@ -181,6 +236,15 @@ public class GameScreen extends Activity {
 			return super.onOptionsItemSelected(item);
 
 		}
+
+	}
+
+	@Override
+	public void onDialogNegativeClick(DialogFragment dialog) {
+		if (maxAudioValue == 50000) {
+			maxAudioValue = appSettings.getWeightedAverageAudioValue() * 2;
+		}
+		System.out.println("quit");
 
 	}
 }
