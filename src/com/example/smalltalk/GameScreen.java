@@ -2,6 +2,7 @@ package com.example.smalltalk;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -11,6 +12,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class GameScreen extends Activity {
@@ -21,27 +23,49 @@ public class GameScreen extends Activity {
 	protected static ProgressBar _progressBar;
 	protected static boolean isListening = false;
 	protected ArrayList<String> questions = new ArrayList<String>();
+	protected int currentQuestionIndex = 0;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		Intent intent = getIntent();
 		QuestionCategory selectedCategory = new QuestionCategory(intent.getStringExtra(MainActivity.EXTRA_CATEGORY));
-		//TextView textView = (TextView) findViewById(R.id.textView1);
-		//textView.setText(selectedCategory.categoryTitleAsArray(), 0, selectedCategory.categoryTitleAsArray().length);
 		setContentView(R.layout.activity_game_screen);
 		this.setTitle(selectedCategory.getCategoryTitle());
-		
-		for (String eachQuestion : getResources().getStringArray(getResources().getIdentifier(selectedCategory.getCategoryName(), "array", "com.example.smalltalk"))) {
-			questions.add(eachQuestion);
-		}
+
+		loadQuestions(selectedCategory.categoryName);
+		shuffleQuestions();
 
 		_progressBar = (ProgressBar) findViewById(R.id.circularProgressBar);
 		_progressBar.setProgress(0);
-		
+
 		startListening();
+		updateQuestionDisplay();
+	}
+
+	public void advanceQuestion() {
+		if (questions.size() > currentQuestionIndex + 1) {
+			currentQuestionIndex++;
+		}
 	}
 	
+	public void updateQuestionDisplay() {
+		TextView textView = (TextView) findViewById(R.id.textView1);
+		char[] question = questions.get(currentQuestionIndex).toCharArray();
+		textView.setText(question, 0, question.length);
+	}
+
+	public void loadQuestions(String categoryName) {
+		questions.clear();
+		for (String eachQuestion : getResources().getStringArray(getResources().getIdentifier(categoryName, "array", "com.example.smalltalk"))) {
+			questions.add(eachQuestion);
+		}
+	}
+
+	public void shuffleQuestions() {
+		Collections.shuffle(questions);
+	}
+
 	public void toggleListening() {
 		if (isListening) {
 			stopListening();
@@ -49,16 +73,16 @@ public class GameScreen extends Activity {
 			startListening();
 		}
 	}
-	
+
 	public void toggleListening(View view) {
 		toggleListening();
 	}
-	
+
 	public void onDestroy() {
 		super.onDestroy();
 		stopListening();
 	}
-	
+
 	protected void stopListening() {
 		isListening = false;
 		mediaRecorder.stop();
@@ -67,7 +91,7 @@ public class GameScreen extends Activity {
 		audioValue = 0;
 		_progressBar.setProgress(0);
 	}
-	
+
 	protected void startListening() {
 		mediaRecorder = new MediaRecorder();
 		mediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
@@ -102,8 +126,8 @@ public class GameScreen extends Activity {
 			}
 		}).start();
 	}
-	
-	
+
+
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {

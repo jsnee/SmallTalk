@@ -14,19 +14,19 @@
     </string-array>
     
     <string-array name="Favorites">
-        <item>Would you rather have toes for fingers or fingers for toes?</item>
+        <item>What is your favorite movie and why?</item>
     </string-array>
     
     <string-array name="Comedy">
-        <item>Would you rather have toes for fingers or fingers for toes?</item>
+        <item>What is the most embarrassing story you can remember?</item>
     </string-array>
     
     <string-array name="Thought_Provoking">
-        <item>Would you rather have toes for fingers or fingers for toes?</item>
+        <item>What is the meaning of life?</item>
     </string-array>
     
     <string-array name="Controversial">
-        <item>Would you rather have toes for fingers or fingers for toes?</item>
+        <item>How do you feel about immigration?</item>
     </string-array>
 
 </resources>
