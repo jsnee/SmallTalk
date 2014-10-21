@@ -11,6 +11,7 @@
     
     <string-array name="This_or_That">
         <item>Would you rather have toes for fingers or fingers for toes?</item>
+        <item>Would you rather own a duck-sized donkey or a donkey-sized duck?</item>
     </string-array>
     
     <string-array name="Favorites">
