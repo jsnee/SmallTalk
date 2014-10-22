@@ -74,6 +74,7 @@ public class GameScreen extends Activity implements AmbientNoiseCaptureDialogFra
 
 	public void advanceQuestion() {
 		if (questions.size() > currentQuestionIndex + 1) {
+			Toast.makeText(getApplicationContext(), "New Question!", Toast.LENGTH_SHORT).show();
 			currentQuestionIndex++;
 			updateQuestionDisplay();
 		}
@@ -88,7 +89,7 @@ public class GameScreen extends Activity implements AmbientNoiseCaptureDialogFra
 	public void displayNextQuestionButton() {
 		ImageButton playNextButton = (ImageButton) findViewById(R.id.imageButtonPlayNext);
 		//playNextButton.setBackgroundResource(R.drawable.skip);
-		playNextButton.setImageResource(R.drawable.skip);
+		playNextButton.setBackgroundResource(R.drawable.skip);
 		playNextButton.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -164,7 +165,6 @@ public class GameScreen extends Activity implements AmbientNoiseCaptureDialogFra
 			e.printStackTrace();
 		}
 		try {
-			System.out.println("Start Recording...");
 			mediaRecorder.start();
 			isListening = true;
 		} catch (Exception e) {
