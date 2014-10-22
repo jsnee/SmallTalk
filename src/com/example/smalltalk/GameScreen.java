@@ -33,7 +33,8 @@ public class GameScreen extends Activity implements AmbientNoiseCaptureDialogFra
 
 	protected MediaRecorder mediaRecorder;
 	protected static int audioValue = 0;
-	protected static int maxAudioValue = 50000;
+	protected static int maxAudioValue = 0;
+	protected static int audioTolerance = 5000;
 	protected static long beginDetectionTime;
 	protected static ProgressBar _progressBar;
 	protected static int quietTickCounts = 0;
@@ -72,9 +73,6 @@ public class GameScreen extends Activity implements AmbientNoiseCaptureDialogFra
 	}
 
 	public void advanceQuestion() {
-		if (!isPlaying) {
-			//return;
-		}
 		if (questions.size() > currentQuestionIndex + 1) {
 			currentQuestionIndex++;
 			updateQuestionDisplay();
@@ -104,7 +102,6 @@ public class GameScreen extends Activity implements AmbientNoiseCaptureDialogFra
 	}
 
 	public void playOnClick(View view) {
-		isPlaying = true;
 		startPlaying();
 		displayNextQuestionButton();
 	}
@@ -141,7 +138,9 @@ public class GameScreen extends Activity implements AmbientNoiseCaptureDialogFra
 
 	public void onDestroy() {
 		super.onDestroy();
-		stopListening();
+		if (isListening) {
+			stopListening();
+		}
 	}
 
 	protected void stopListening() {
@@ -173,52 +172,61 @@ public class GameScreen extends Activity implements AmbientNoiseCaptureDialogFra
 		}
 		new Thread(new Runnable() {
 			public void run() {
-				while(isListening) {
-					audioValue = mediaRecorder.getMaxAmplitude();
-					int progressLevel = audioValue / maxAudioValue;
-					progressLevel = (progressLevel > 100 ? 100:progressLevel);
-					_progressBar.setProgress(progressLevel);
-					if (isDetectingNoise) {
-						System.out.println("Still Detecting Noise...");
-						appSettings.refineWeightedAverageAudioValue(audioValue);
+				try {
+					while(isListening) {
+						audioValue = mediaRecorder.getMaxAmplitude();
+						double unitValue = (maxAudioValue - audioTolerance);
+						int progressLevel = (int) (audioValue / unitValue * 100);
+						progressLevel = (progressLevel > 100 ? 100:progressLevel);
+						_progressBar.setProgress(progressLevel);
+						if (isDetectingNoise) {
+							System.out.println("Still Detecting Noise...");
+							if (audioValue > maxAudioValue) {
+								maxAudioValue = audioValue;
+							}
+							appSettings.refineWeightedAverageAudioValue(audioValue);
 
-						if (System.currentTimeMillis() > beginDetectionTime + 10000) {
-							isDetectingNoise = false;
-							maxAudioValue = appSettings.getWeightedAverageAudioValue() / 2;
-							noiseDetectionDialog.dismiss();
-						}
-					} else {
-						System.out.println("Not Detecting Noise");
-						if (progressLevel < appSettings.getThresholdRatio() && isPlaying) {
-							System.out.println("Detected Silence");
-							quietTickCounts++;
-							wasLastTickQuiet = true;
-							int quietSeconds = quietTickCounts * 100 / 1000;
-							System.out.println("Detected Silence for " + quietSeconds + " seconds");
-							if (quietSeconds >= appSettings.getTimerSeconds()) {
-								System.out.println("Attempting to advance question");
-								quietTickCounts = 0;
-								wasLastTickQuiet = false;
-								runOnUiThread(new Runnable() {
-									@Override
-									public void run() {
-										advanceQuestion();
-										alarm();
-									}
-								});
+							if (System.currentTimeMillis() > beginDetectionTime + 10000) {
+								isDetectingNoise = false;
+								audioTolerance = (int) (appSettings.getWeightedAverageAudioValue());
+								noiseDetectionDialog.dismiss();
+								appSettings.setWeightedAverageAudioValue(0);
 							}
 						} else {
-							if (!wasLastTickQuiet) {
-								quietTickCounts = 0;
+							System.out.println("Not Detecting Noise");
+							if (progressLevel < appSettings.getThresholdRatio() && isPlaying) {
+								System.out.println("Detected Silence");
+								quietTickCounts++;
+								wasLastTickQuiet = true;
+								int quietSeconds = quietTickCounts * 100 / 1000;
+								System.out.println("Detected Silence for " + quietSeconds + " seconds");
+								if (quietSeconds >= appSettings.getTimerSeconds()) {
+									System.out.println("Attempting to advance question");
+									quietTickCounts = 0;
+									wasLastTickQuiet = false;
+									runOnUiThread(new Runnable() {
+										@Override
+										public void run() {
+											advanceQuestion();
+											alarm();
+										}
+									});
+								}
+							} else {
+								if (!wasLastTickQuiet) {
+									quietTickCounts = 0;
+								}
+								wasLastTickQuiet = false;
 							}
-							wasLastTickQuiet = false;
+						}
+						try {
+							Thread.sleep(100);
+						} catch (InterruptedException e) {
+							e.printStackTrace();
 						}
 					}
-					try {
-						Thread.sleep(100);
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
+				} catch (Exception e) {
+					e.printStackTrace();
 				}
 			}
 		}).start();
@@ -277,8 +285,8 @@ public class GameScreen extends Activity implements AmbientNoiseCaptureDialogFra
 
 	@Override
 	public void onDialogNegativeClick(DialogFragment dialog) {
-		if (maxAudioValue == 50000) {
-			maxAudioValue = appSettings.getWeightedAverageAudioValue() * 2;
+		if (audioTolerance == 0) {
+			audioTolerance = (int) (appSettings.getWeightedAverageAudioValue() * 1.25);
 		}
 		System.out.println("quit");
 
