@@ -1,5 +1,8 @@
 package com.example.smalltalk;
 
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
+
 public class SettingsSingleton {
 	
 	private static SettingsSingleton appSettings = null;
@@ -14,6 +17,11 @@ public class SettingsSingleton {
 		if (appSettings == null) {
 			appSettings = new SettingsSingleton();
 		}
+	}
+	
+	public static void loadSettings(SharedPreferences sharedPreferences) {
+		loadSettings();
+		timerSeconds = Integer.parseInt(sharedPreferences.getString("prefTimer", "5"));
 	}
 	
 	public static SettingsSingleton getSettings() {

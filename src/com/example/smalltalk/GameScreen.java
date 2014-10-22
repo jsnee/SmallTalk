@@ -6,9 +6,15 @@ import java.util.Collections;
 
 import android.app.Activity;
 import android.app.DialogFragment;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.media.AudioManager;
+import android.media.MediaPlayer;
 import android.media.MediaRecorder;
+import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -38,12 +44,13 @@ public class GameScreen extends Activity implements AmbientNoiseCaptureDialogFra
 	protected static DialogFragment noiseDetectionDialog;
 	protected ArrayList<String> questions = new ArrayList<String>();
 	protected int currentQuestionIndex = 0;
+	protected static String preserveCategory = null;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		Intent intent = getIntent();
-		QuestionCategory selectedCategory = new QuestionCategory(intent.getStringExtra(MainActivity.EXTRA_CATEGORY));
+		QuestionCategory selectedCategory = new QuestionCategory(preserveCategory);
 		setContentView(R.layout.activity_game_screen);
 		this.setTitle(selectedCategory.getCategoryTitle());
 
@@ -89,6 +96,8 @@ public class GameScreen extends Activity implements AmbientNoiseCaptureDialogFra
 			@Override
 			public void onClick(View view) {
 				advanceQuestion();
+				quietTickCounts = 0;
+				wasLastTickQuiet = false;
 			}
 
 		});
@@ -144,11 +153,6 @@ public class GameScreen extends Activity implements AmbientNoiseCaptureDialogFra
 		_progressBar.setProgress(0);
 	}
 
-	protected static boolean isQuiet() {
-		double thresholdRatio = audioValue / maxAudioValue * 100.0;
-		return (thresholdRatio > appSettings.getThresholdRatio());
-	}
-
 	protected void startListening() {
 		mediaRecorder = new MediaRecorder();
 		mediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
@@ -175,6 +179,7 @@ public class GameScreen extends Activity implements AmbientNoiseCaptureDialogFra
 					progressLevel = (progressLevel > 100 ? 100:progressLevel);
 					_progressBar.setProgress(progressLevel);
 					if (isDetectingNoise) {
+						System.out.println("Still Detecting Noise...");
 						appSettings.refineWeightedAverageAudioValue(audioValue);
 
 						if (System.currentTimeMillis() > beginDetectionTime + 10000) {
@@ -183,17 +188,22 @@ public class GameScreen extends Activity implements AmbientNoiseCaptureDialogFra
 							noiseDetectionDialog.dismiss();
 						}
 					} else {
-						if (isQuiet()) {
+						System.out.println("Not Detecting Noise");
+						if (progressLevel < appSettings.getThresholdRatio() && isPlaying) {
+							System.out.println("Detected Silence");
 							quietTickCounts++;
 							wasLastTickQuiet = true;
 							int quietSeconds = quietTickCounts * 100 / 1000;
+							System.out.println("Detected Silence for " + quietSeconds + " seconds");
 							if (quietSeconds >= appSettings.getTimerSeconds()) {
+								System.out.println("Attempting to advance question");
 								quietTickCounts = 0;
 								wasLastTickQuiet = false;
 								runOnUiThread(new Runnable() {
 									@Override
 									public void run() {
 										advanceQuestion();
+										alarm();
 									}
 								});
 							}
@@ -213,7 +223,33 @@ public class GameScreen extends Activity implements AmbientNoiseCaptureDialogFra
 			}
 		}).start();
 	}
+	protected void alarm(){
+		SharedPreferences getAlarms = PreferenceManager.
+				getDefaultSharedPreferences(getBaseContext());
+		String alarms = getAlarms.getString("prefSound", "default ringtone");
+		Uri uri = Uri.parse(alarms);
+		playSound(this, uri);
 
+		//call mMediaPlayer.stop(); when you want the sound to stop
+	}
+
+
+	protected MediaPlayer mMediaPlayer;
+	protected void playSound(Context context, Uri alert) {
+		mMediaPlayer = new MediaPlayer();
+		try {
+			mMediaPlayer.setDataSource(context, alert);
+			final AudioManager audioManager = (AudioManager) context
+					.getSystemService(Context.AUDIO_SERVICE);
+			if (audioManager.getStreamVolume(AudioManager.STREAM_ALARM) != 0) {
+				mMediaPlayer.setAudioStreamType(AudioManager.STREAM_ALARM);
+				mMediaPlayer.prepare();
+				mMediaPlayer.start();
+			}
+		} catch (IOException e) {
+			System.out.println("OOPS");
+		}
+	}
 
 
 	@Override

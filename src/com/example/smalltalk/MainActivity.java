@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -27,6 +28,7 @@ public class MainActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+		SettingsSingleton.loadSettings(PreferenceManager.getDefaultSharedPreferences(this));
 		categoryAdapter = new ArrayAdapter<QuestionCategory>(this, android.R.layout.simple_list_item_1, questionCategories);
 		loadQuestionCategories();
 		ListView categoryListView = (ListView) findViewById(R.id.mainCategoryList);
@@ -73,11 +75,7 @@ public class MainActivity extends Activity {
 	            case  R.id.settings:
 	            	//Settings selected
 	            	startActivity(new Intent(this, SettingScreen.class));
-	                return true;
-	            case  R.id.addQuestion:
-	            	//+ Add Question selected
-	            	
-	                return true;	                
+	                return true;                
 	            default:
 	                return super.onOptionsItemSelected(item);
 
@@ -87,7 +85,7 @@ public class MainActivity extends Activity {
 	
 	protected void initializeGameScreen(String selectedCategory) {
 		Intent intent = new Intent(this, GameScreen.class);
-		intent.putExtra(EXTRA_CATEGORY, selectedCategory);
+		GameScreen.preserveCategory = selectedCategory;
 		startActivity(intent);
 	}
 

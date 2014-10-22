@@ -12,5 +12,9 @@
     <string name="title_activity_question_wframe">QuestionWFrame</string>
     <string name="dialog_noisecap_cancel">Skip this step</string>
     <string name="dialog_capturing_noise">Please wait while we detect the ambient noise...</string>
+    <string name="pref_timer">Timer</string>
+    <string name="pref_timer_summary">The time the app will wait before moving on to the next question</string>
+    <string name="pref_timer_val_default">5</string>
+    <string name="pref_notification_sound">Notification Sound</string>
 
 </resources>
