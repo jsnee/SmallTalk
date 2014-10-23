@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+        <ListPreference
+            android:key="prefTimer"
+            android:entries="@array/pref_timer"
+            android:summary="@string/pref_timer_summary"
+            android:entryValues="@array/pref_timer_vals"
+            android:defaultValue="@string/pref_timer_val_default"
+            android:title="@string/pref_timer" />
+        
+        <ListPreference 
+            android:key="prefTimeout"
+            android:entries="@array/pref_timeout"
+            android:entryValues="@array/pref_timeout_vals"
+            android:summary="@string/pref_timeout_summary"
+            android:defaultValue="@string/pref_timeout_default"
+            android:title="@string/pref_timeout" />
+        
+        <RingtonePreference
+            android:key="prefSound"
+            android:title="@string/pref_notification_sound"
+            android:ringtoneType="notification" />
+ 
+</PreferenceScreen>
