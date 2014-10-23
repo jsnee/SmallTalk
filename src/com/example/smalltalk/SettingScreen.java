@@ -1,16 +1,19 @@
 package com.example.smalltalk;
 
-import android.app.Activity;
 import android.os.Bundle;
+import android.preference.PreferenceActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
-public class SettingScreen extends Activity {
+public class SettingScreen extends PreferenceActivity {
+	
+	private static SettingsSingleton appSettings = SettingsSingleton.getSettings();
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_setting_screen);
+		//setContentView(R.layout.activity_setting_screen);
+		addPreferencesFromResource(R.xml.settings);
 	}
 
 	@Override
