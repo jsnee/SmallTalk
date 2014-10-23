@@ -1,11 +1,8 @@
 package edu.drake.smalltalk;
 
-import com.example.smalltalk.R;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.widget.RelativeLayout;
 
 public class SplashScreen extends Activity {
 	@Override

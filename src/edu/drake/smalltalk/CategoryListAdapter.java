@@ -2,8 +2,6 @@ package edu.drake.smalltalk;
 
 import java.util.List;
 
-import com.example.smalltalk.R;
-
 import android.app.Activity;
 import android.content.Context;
 import android.view.LayoutInflater;

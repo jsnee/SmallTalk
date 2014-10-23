@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.smalltalk"
+    package="edu.drake.smalltalk"
     android:versionCode="1"
     android:versionName="1.0" >
 
@@ -9,7 +9,6 @@
         android:targetSdkVersion="19" />
 
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
-    <uses-permission android:name="android.permission.WAKE_LOCK" />
 
     <application
         android:allowBackup="true"
@@ -44,7 +43,7 @@
             android:parentActivityName="edu.drake.smalltalk.MainActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.smalltalk.MainActivity" />
+                android:value="edu.drake.smalltalk.MainActivity" />
         </activity>
         <activity
             android:name="edu.drake.smalltalk.SettingScreen"

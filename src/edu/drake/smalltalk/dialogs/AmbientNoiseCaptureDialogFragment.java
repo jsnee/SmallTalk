@@ -7,8 +7,7 @@ import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.media.MediaRecorder;
 import android.os.Bundle;
-
-import com.example.smalltalk.R;
+import edu.drake.smalltalk.R;
 
 public class AmbientNoiseCaptureDialogFragment extends DialogFragment {
 	MediaRecorder mediaRecorder;

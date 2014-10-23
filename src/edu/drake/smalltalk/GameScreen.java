@@ -26,9 +26,6 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.example.smalltalk.R;
-
 import edu.drake.smalltalk.dialogs.AmbientNoiseCaptureDialogFragment;
 
 public class GameScreen extends Activity implements AmbientNoiseCaptureDialogFragment.AmbientNoiseCaptureDialogListener {
