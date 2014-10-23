@@ -69,7 +69,7 @@ public class GameScreen extends Activity implements AmbientNoiseCaptureDialogFra
 		_progressBar.setProgress(0);
 
 		startListening();
-		updateQuestionDisplay();
+		displayInstructionsText();
 
 		beginDetectionTime = System.currentTimeMillis();
 		appSettings.setWeightedAverageAudioValue(mediaRecorder.getMaxAmplitude());
@@ -98,6 +98,12 @@ public class GameScreen extends Activity implements AmbientNoiseCaptureDialogFra
 	public void updateQuestionDisplay() {
 		TextView textView = (TextView) findViewById(R.id.textView1);
 		char[] question = questions.get(currentQuestionIndex).toCharArray();
+		textView.setText(question, 0, question.length);
+	}
+	
+	public void displayInstructionsText() {
+		TextView textView = (TextView) findViewById(R.id.textView1);
+		char[] question = "When you are ready, press the play button!".toCharArray();
 		textView.setText(question, 0, question.length);
 	}
 
