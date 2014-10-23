@@ -1,4 +1,4 @@
-package com.example.smalltalk;
+package edu.drake.smalltalk;
 
 public class QuestionCategory {
 	

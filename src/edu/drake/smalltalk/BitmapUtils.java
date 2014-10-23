@@ -1,4 +1,4 @@
-package com.example.smalltalk;
+package edu.drake.smalltalk;
 
 import android.content.res.Resources;
 import android.graphics.Bitmap;

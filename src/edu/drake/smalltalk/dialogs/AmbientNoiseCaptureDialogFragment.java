@@ -1,4 +1,4 @@
-package com.example.smalltalk.dialogs;
+package edu.drake.smalltalk.dialogs;
 
 import android.app.Activity;
 import android.app.AlertDialog;

@@ -1,4 +1,4 @@
-package com.example.smalltalk;
+package edu.drake.smalltalk;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -27,7 +27,9 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.smalltalk.dialogs.AmbientNoiseCaptureDialogFragment;
+import com.example.smalltalk.R;
+
+import edu.drake.smalltalk.dialogs.AmbientNoiseCaptureDialogFragment;
 
 public class GameScreen extends Activity implements AmbientNoiseCaptureDialogFragment.AmbientNoiseCaptureDialogListener {
 

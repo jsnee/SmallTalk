@@ -29,7 +29,7 @@
       
         
          <activity
-            android:name=".MainActivity"
+            android:name="edu.drake.smalltalk.MainActivity"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="com.example.homeScreen" />
@@ -39,23 +39,23 @@
        
         
         <activity
-            android:name=".GameScreen"
+            android:name="edu.drake.smalltalk.GameScreen"
             android:label="@string/title_activity_game_screen"
-            android:parentActivityName=".MainActivity" >
+            android:parentActivityName="edu.drake.smalltalk.MainActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.smalltalk.MainActivity" />
         </activity>
         <activity
-            android:name=".SettingScreen"
+            android:name="edu.drake.smalltalk.SettingScreen"
             android:label="@string/title_activity_setting_screen"
-            android:parentActivityName=".GameScreen" >
+            android:parentActivityName="edu.drake.smalltalk.GameScreen" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.smalltalk.GameScreen" />
         </activity>
         <activity
-            android:name=".QuestionWFrame"
+            android:name="edu.drake.smalltalk.QuestionWFrame"
             android:label="@string/title_activity_question_wframe" >
         </activity>
     </application>

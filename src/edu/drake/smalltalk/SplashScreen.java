@@ -1,4 +1,6 @@
-package com.example.smalltalk;
+package edu.drake.smalltalk;
+
+import com.example.smalltalk.R;
 
 import android.app.Activity;
 import android.content.Intent;
