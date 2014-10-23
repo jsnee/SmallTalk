@@ -16,5 +16,8 @@
     <string name="pref_timer_summary">The time the app will wait before moving on to the next question</string>
     <string name="pref_timer_val_default">5</string>
     <string name="pref_notification_sound">Notification Sound</string>
+    <string name="pref_timeout">Turn Me Off After</string>
+    <string name="pref_timeout_summary">SmallTalk will keep the screen on and running for the selected amount of time</string>
+    <string name="pref_timeout_default">0</string>
 
 </resources>

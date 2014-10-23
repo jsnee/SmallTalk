@@ -20,7 +20,9 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.WindowManager;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -36,6 +38,7 @@ public class GameScreen extends Activity implements AmbientNoiseCaptureDialogFra
 	protected static int maxAudioValue = 0;
 	protected static int audioTolerance = 5000;
 	protected static long beginDetectionTime;
+	protected static long beginPlayingTime;
 	protected static ProgressBar _progressBar;
 	protected static int quietTickCounts = 0;
 	protected static boolean wasLastTickQuiet = false;
@@ -54,6 +57,8 @@ public class GameScreen extends Activity implements AmbientNoiseCaptureDialogFra
 		QuestionCategory selectedCategory = new QuestionCategory(preserveCategory);
 		setContentView(R.layout.activity_game_screen);
 		this.setTitle(selectedCategory.getCategoryTitle());
+		ImageView gameBackground = (ImageView) findViewById(R.id.gameBackground);
+		gameBackground.setImageBitmap(BitmapUtils.decodeSampledBitmapFromResource(getResources(), R.drawable.game_background, 100, 100));
 
 		loadQuestions(selectedCategory.categoryName);
 		shuffleQuestions();
@@ -80,38 +85,55 @@ public class GameScreen extends Activity implements AmbientNoiseCaptureDialogFra
 		}
 	}
 
+	private void enableKeepScreenAwake() {
+		getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+	}
+
+	private void disableKeepScreenAwake() {
+		getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+	}
+
 	public void updateQuestionDisplay() {
 		TextView textView = (TextView) findViewById(R.id.textView1);
 		char[] question = questions.get(currentQuestionIndex).toCharArray();
 		textView.setText(question, 0, question.length);
 	}
 
-	public void displayNextQuestionButton() {
+	protected void displayNextQuestionButton() {
 		ImageButton playNextButton = (ImageButton) findViewById(R.id.imageButtonPlayNext);
-		//playNextButton.setBackgroundResource(R.drawable.skip);
 		playNextButton.setBackgroundResource(R.drawable.skip);
 		playNextButton.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View view) {
-				advanceQuestion();
-				quietTickCounts = 0;
-				wasLastTickQuiet = false;
+				skipOnClick(view);
 			}
 
 		});
+	}
+	
+	protected void skipOnClick(View view) {
+		advanceQuestion();
+		quietTickCounts = 0;
+		wasLastTickQuiet = false;
+	}
+
+	protected void displayStartPlayingButtion() {
+		ImageButton playNextButton = (ImageButton) findViewById(R.id.imageButtonPlayNext);
+		playNextButton.setBackgroundResource(R.drawable.play);
+		playNextButton.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View view) {
+				playOnClick(view);
+			}
+		});
+
 	}
 
 	public void playOnClick(View view) {
 		startPlaying();
 		displayNextQuestionButton();
-	}
-
-	public void startPlaying() {
-		isPlaying = true;
-		shuffleQuestions();
-		currentQuestionIndex = 0;
-		updateQuestionDisplay();
 	}
 
 	public void loadQuestions(String categoryName) {
@@ -139,12 +161,32 @@ public class GameScreen extends Activity implements AmbientNoiseCaptureDialogFra
 
 	public void onDestroy() {
 		super.onDestroy();
+		stopPlaying();
+	}
+
+	protected void resetStartPlayingTime() {
+		beginPlayingTime = System.currentTimeMillis();
+	}
+
+	public void startPlaying() {
+		resetStartPlayingTime();
+		isPlaying = true;
+		shuffleQuestions();
+		currentQuestionIndex = 0;
+		updateQuestionDisplay();
+	}
+
+	protected void stopPlaying() {
+		isPlaying = false;
+		disableKeepScreenAwake();
+		displayStartPlayingButtion();
 		if (isListening) {
 			stopListening();
 		}
 	}
 
 	protected void stopListening() {
+		_progressBar.setBackgroundResource(R.drawable.microphone_button_mute);
 		isListening = false;
 		mediaRecorder.stop();
 		mediaRecorder.reset();
@@ -154,6 +196,14 @@ public class GameScreen extends Activity implements AmbientNoiseCaptureDialogFra
 	}
 
 	protected void startListening() {
+		if (isPlaying) {
+			resetStartPlayingTime();
+		}
+		if (isListening) {
+			stopListening();
+		}
+		enableKeepScreenAwake();
+		_progressBar.setBackgroundResource(R.drawable.microphone);
 		mediaRecorder = new MediaRecorder();
 		mediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
 		mediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
@@ -174,6 +224,7 @@ public class GameScreen extends Activity implements AmbientNoiseCaptureDialogFra
 			public void run() {
 				try {
 					while(isListening) {
+
 						audioValue = mediaRecorder.getMaxAmplitude();
 						double unitValue = (maxAudioValue - audioTolerance);
 						int progressLevel = (int) (audioValue / unitValue * 100);
@@ -219,6 +270,15 @@ public class GameScreen extends Activity implements AmbientNoiseCaptureDialogFra
 								wasLastTickQuiet = false;
 							}
 						}
+						if (isListening && isPlaying && appSettings.getTimeout() != 0 && System.currentTimeMillis() >= (appSettings.getTimeout() * 60 * 1000 + beginPlayingTime)) {
+							runOnUiThread(new Runnable() {
+								@Override
+								public void run() {
+									Toast.makeText(getApplicationContext(), "Time's Up!", Toast.LENGTH_LONG).show();
+									stopPlaying();
+								}
+							});
+						}
 						try {
 							Thread.sleep(100);
 						} catch (InterruptedException e) {
@@ -241,7 +301,6 @@ public class GameScreen extends Activity implements AmbientNoiseCaptureDialogFra
 		//call mMediaPlayer.stop(); when you want the sound to stop
 	}
 
-
 	protected MediaPlayer mMediaPlayer;
 	protected void playSound(Context context, Uri alert) {
 		mMediaPlayer = new MediaPlayer();
@@ -249,8 +308,8 @@ public class GameScreen extends Activity implements AmbientNoiseCaptureDialogFra
 			mMediaPlayer.setDataSource(context, alert);
 			final AudioManager audioManager = (AudioManager) context
 					.getSystemService(Context.AUDIO_SERVICE);
-			if (audioManager.getStreamVolume(AudioManager.STREAM_ALARM) != 0) {
-				mMediaPlayer.setAudioStreamType(AudioManager.STREAM_ALARM);
+			if (audioManager.getStreamVolume(AudioManager.STREAM_NOTIFICATION) != 0) {
+				mMediaPlayer.setAudioStreamType(AudioManager.STREAM_NOTIFICATION);
 				mMediaPlayer.prepare();
 				mMediaPlayer.start();
 			}

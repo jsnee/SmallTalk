@@ -1,6 +1,7 @@
 package com.example.smalltalk;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -12,7 +13,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 //comment
@@ -20,8 +21,8 @@ import android.widget.TextView;
 public class MainActivity extends Activity {
 
 	protected static int audioValue = 0;
-	private ArrayList<QuestionCategory> questionCategories = new ArrayList<QuestionCategory>();
-	public ArrayAdapter<QuestionCategory> categoryAdapter;
+	private List<QuestionCategory> questionCategories = new ArrayList<QuestionCategory>();
+	protected CategoryListAdapter categoryAdapter;
 	public final static String EXTRA_CATEGORY = "com.example.smalltalk.CATEGORY";
 
 	@Override
@@ -29,24 +30,23 @@ public class MainActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		SettingsSingleton.loadSettings(PreferenceManager.getDefaultSharedPreferences(this));
-		categoryAdapter = new ArrayAdapter<QuestionCategory>(this, android.R.layout.simple_list_item_1, questionCategories);
 		loadQuestionCategories();
+		categoryAdapter = new CategoryListAdapter(this, questionCategories);
+		ImageView mainBackground = (ImageView) findViewById(R.id.mainBackground);
+		mainBackground.setImageBitmap(BitmapUtils.decodeSampledBitmapFromResource(getResources(), R.drawable.main_background, 100, 100));
 		ListView categoryListView = (ListView) findViewById(R.id.mainCategoryList);
 		categoryListView.setAdapter(categoryAdapter);
 		categoryListView.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				String selectedCategory = ((TextView)view).getText().toString();
+				String selectedCategory = ((TextView) view.findViewById(R.id.categoryTitle)).getText().toString();
 				if (QuestionCategory.isQuestionCategoryTitle(selectedCategory)) {
-					//PUT ADD NEW CATEGORY CODE HERE
+					
 				} else {
-					System.out.println(selectedCategory);
 					initializeGameScreen(selectedCategory);
-					//Intent intent = new Intent(this, GameScreen.class);
 				}
 			}
-			
 		});
 	}
 
@@ -58,13 +58,10 @@ public class MainActivity extends Activity {
 	}
 	
 	public void loadQuestionCategories() {
-		//String[] categories = getResources().getStringArray(R.array.categories);
 		for (String eachCategory : getResources().getStringArray(R.array.categories)) {
 			questionCategories.add(new QuestionCategory(eachCategory));
-			System.out.println(eachCategory);
 		}
 		questionCategories.add(QuestionCategory.getRandomCategory());
-		categoryAdapter.notifyDataSetChanged();
 	}
 
 	@Override

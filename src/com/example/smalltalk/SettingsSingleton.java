@@ -1,7 +1,6 @@
 package com.example.smalltalk;
 
 import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 
 public class SettingsSingleton {
 	
@@ -9,6 +8,7 @@ public class SettingsSingleton {
 	private static int weightedAverageAudioValue = 50000;
 	private static double thresholdRatio = 45.0;
 	private static int timerSeconds = 5;
+	private static SharedPreferences sharedPreferences;
 	
 	private SettingsSingleton() {
 	}
@@ -19,9 +19,10 @@ public class SettingsSingleton {
 		}
 	}
 	
-	public static void loadSettings(SharedPreferences sharedPreferences) {
+	public static void loadSettings(SharedPreferences sharedPrefs) {
 		loadSettings();
-		timerSeconds = Integer.parseInt(sharedPreferences.getString("prefTimer", "5"));
+		sharedPreferences = sharedPrefs;
+		timerSeconds = Integer.parseInt(sharedPrefs.getString("prefTimer", "5"));
 	}
 	
 	public static SettingsSingleton getSettings() {
@@ -50,10 +51,14 @@ public class SettingsSingleton {
 	}
 
 	public int getTimerSeconds() {
-		return timerSeconds;
+		return Integer.parseInt(sharedPreferences.getString("prefTimer", "5"));
 	}
 	
 	public void setTimerSeconds(int timerSeconds) {
 		this.timerSeconds = timerSeconds;
+	}
+	
+	public int getTimeout() {
+		return Integer.parseInt(sharedPreferences.getString("prefTimeout", "0"));
 	}
 }
