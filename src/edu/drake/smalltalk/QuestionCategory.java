@@ -57,5 +57,13 @@ public class QuestionCategory {
 		}
 		return result;
 	}
+	
+	public static boolean isQuestionCategoryName(String name) {
+		boolean result = false;
+		if (name.equals(randomCategoryName)) {
+			result = true;
+		}
+		return result;
+	}
 
 }

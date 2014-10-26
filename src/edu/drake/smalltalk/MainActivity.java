@@ -29,6 +29,7 @@ public class MainActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+		PreferenceManager.setDefaultValues(this, R.xml.settings, false);
 		SettingsSingleton.loadSettings(PreferenceManager.getDefaultSharedPreferences(this));
 		loadQuestionCategories();
 		categoryAdapter = new CategoryListAdapter(this, questionCategories);
@@ -41,11 +42,7 @@ public class MainActivity extends Activity {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 				String selectedCategory = ((TextView) view.findViewById(R.id.categoryTitle)).getText().toString();
-				if (QuestionCategory.isQuestionCategoryTitle(selectedCategory)) {
-					
-				} else {
-					initializeGameScreen(selectedCategory);
-				}
+				initializeGameScreen(selectedCategory);
 			}
 		});
 	}

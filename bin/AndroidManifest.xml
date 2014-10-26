@@ -12,7 +12,7 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@drawable/ic_launcher_xxhigh"
+        android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@android:style/Theme.Holo"
         android:allowClearUserData="true" >
@@ -51,7 +51,7 @@
             android:parentActivityName="edu.drake.smalltalk.GameScreen" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.smalltalk.GameScreen" />
+                android:value="edu.drake.smalltalk.GameScreen" />
         </activity>
         <activity
             android:name="edu.drake.smalltalk.QuestionWFrame"

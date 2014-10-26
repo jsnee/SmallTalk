@@ -50,10 +50,9 @@ public class SettingsSingleton {
 		this.thresholdRatio = thresholdRatio;
 	}
 	
-//	public boolean isTextToSpeechEnabled() {
-//		return true;
-//		//return sharedPreferences.getBoolean("prefSpeech", false);
-//	}
+	public boolean isTextToSpeechEnabled() {
+		return sharedPreferences.getBoolean("prefSpeech", false);
+	}
 
 	public int getTimerSeconds() {
 		return Integer.parseInt(sharedPreferences.getString("prefTimer", "5"));

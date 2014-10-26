@@ -1,10 +1,15 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.example.smalltalk.GameScreen" >
-
+    tools:context="edu.drake.smalltalk.GameScreen" >
+    
     <item
-        android:id="@+id/action_settings"
-        android:orderInCategory="100"
+        android:id="@+id/recalibrateMic"
+        android:showAsAction="never"
+        android:title="@string/action_recalibrate_mic"/>
+    
+    <item
+        android:id="@+id/settings"
+        android:orderInCategory="2"
         android:showAsAction="never"
         android:title="@string/action_settings"/>
 
