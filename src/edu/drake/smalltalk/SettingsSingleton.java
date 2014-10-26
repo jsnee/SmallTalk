@@ -49,6 +49,11 @@ public class SettingsSingleton {
 	public void setThresholdRatio(double thresholdRatio) {
 		this.thresholdRatio = thresholdRatio;
 	}
+	
+//	public boolean isTextToSpeechEnabled() {
+//		return true;
+//		//return sharedPreferences.getBoolean("prefSpeech", false);
+//	}
 
 	public int getTimerSeconds() {
 		return Integer.parseInt(sharedPreferences.getString("prefTimer", "5"));

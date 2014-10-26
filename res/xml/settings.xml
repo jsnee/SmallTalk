@@ -20,5 +20,9 @@
             android:key="prefSound"
             android:title="@string/pref_notification_sound"
             android:ringtoneType="notification" />
+        
+        <CheckBoxPreference
+            android:key="prefSpeech"
+            android:title="@string/pref_speech" />
  
 </PreferenceScreen>

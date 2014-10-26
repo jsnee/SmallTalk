@@ -19,5 +19,6 @@
     <string name="pref_timeout">Turn Me Off After</string>
     <string name="pref_timeout_summary">SmallTalk will keep the screen on and running for the selected amount of time</string>
     <string name="pref_timeout_default">0</string>
+    <string name="pref_speech">Text-to-Speech</string>
 
 </resources>
