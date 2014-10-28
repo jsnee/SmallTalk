@@ -1,9 +1,16 @@
 package edu.drake.smalltalk;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import java.util.Locale;
+import java.util.Scanner;
+
+import org.apache.commons.math3.linear.EigenDecomposition;
+import org.apache.commons.math3.linear.MatrixUtils;
+import org.apache.commons.math3.linear.RealMatrix;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -59,7 +66,7 @@ public class GameScreen extends Activity implements AmbientNoiseCaptureDialogFra
 	protected boolean textToSpeechEnabled = false;
 	protected AlertDialog initDialog;
 	protected Thread mainThread;
-
+	protected static ArrayList<Integer> audioLevels = new ArrayList<Integer>();
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -106,6 +113,13 @@ public class GameScreen extends Activity implements AmbientNoiseCaptureDialogFra
 					while(isListening) {
 
 						audioValue = mediaRecorder.getMaxAmplitude();
+						if (audioLevels.size() < 100) {
+							audioLevels.add(audioValue);
+						}
+						else {
+							audioLevels.remove(0);
+							audioLevels.add(audioValue);
+						}
 						double unitValue = (maxAudioValue - audioTolerance);
 						int progressLevel = (int) (audioValue / unitValue * 100);
 						progressLevel = (progressLevel > 100 ? 100:progressLevel);
@@ -558,5 +572,119 @@ public class GameScreen extends Activity implements AmbientNoiseCaptureDialogFra
 		}
 		isDetectingNoise = false;
 		checkTextToSpeechEnabled();
+	}
+	
+	public static double coeffA, coeffB, coeffC, coeffD, coeffE;
+
+	public static void processList(ArrayList<Integer> l) {
+		
+		int size = 0;
+		size = l.size();
+		System.out.println(size);
+		int index = 0;
+		double[][] matrixA = {
+				{0.0,0.0,0.0,0.0,0.0},
+				{0.0,0.0,0.0,0.0,0.0},
+				{0.0,0.0,0.0,0.0,0.0},
+				{0.0,0.0,0.0,0.0,0.0},
+				{0.0,0.0,0.0,0.0,0.0}};
+		double[][] matrixB = {
+				{0.0,0.0,0.0,0.0,0.0},
+				{0.0,0.0,0.0,0.0,0.0},
+				{0.0,0.0,0.0,0.0,0.0},
+				{0.0,0.0,0.0,0.0,0.0},
+				{0.0,0.0,0.0,0.0,0.0}};
+		double[][] matrixC = {
+				{0.0,0.0,0.0,0.0,0.0},
+				{0.0,0.0,0.0,0.0,0.0},
+				{0.0,0.0,0.0,0.0,0.0},
+				{0.0,0.0,0.0,0.0,0.0},
+				{0.0,0.0,0.0,0.0,0.0}}; 
+		double[][] matrixD = {
+				{0.0,0.0,0.0,0.0,0.0},
+				{0.0,0.0,0.0,0.0,0.0},
+				{0.0,0.0,0.0,0.0,0.0},
+				{0.0,0.0,0.0,0.0,0.0},
+				{0.0,0.0,0.0,0.0,0.0}};
+		double[][] matrixE = {
+				{0.0,0.0,0.0,0.0,0.0},
+				{0.0,0.0,0.0,0.0,0.0},
+				{0.0,0.0,0.0,0.0,0.0},
+				{0.0,0.0,0.0,0.0,0.0},
+				{0.0,0.0,0.0,0.0,0.0}};
+
+		double[][] originalMatrix = {
+				{0.0,0.0,0.0,0.0,0.0},
+				{0.0,0.0,0.0,0.0,0.0},
+				{0.0,0.0,0.0,0.0,0.0},
+				{0.0,0.0,0.0,0.0,0.0},
+				{0.0,0.0,0.0,0.0,0.0}};
+
+		double[] answer = new double[5];
+		try {
+			for (int i = 0; i < 5; i++) {
+				for (int j = 0; j < 5; j++) {
+					if (index < 95) {
+						double temp = l.get(index) + l.get(index+1) + l.get(index+2) + l.get(index+3) + l.get(index+4);
+						temp /= 5;				
+
+						matrixA[i][j] = Math.pow(index, i);
+						matrixB[i][j] = Math.pow(index, i);
+						matrixC[i][j] = Math.pow(index, i);
+						matrixD[i][j] = Math.pow(index, i);
+						matrixE[i][j] = Math.pow(index, i);
+						originalMatrix[i][j] = Math.pow(index, i);
+						answer[i] = temp;
+						index += 4;
+					}
+				}
+			}
+		} catch (IndexOutOfBoundsException e) {
+			e.printStackTrace();
+		}
+		for (int i = 0; i < 5; i++) {
+			matrixA[0][i] = answer[i];
+			matrixB[1][i] = answer[i];
+			matrixC[2][i] = answer[i];
+			matrixD[3][i] = answer[i];
+			matrixE[4][i] = answer[i];
+		}
+
+
+		RealMatrix mA = MatrixUtils.createRealMatrix(matrixA);
+		RealMatrix mB = MatrixUtils.createRealMatrix(matrixB);
+		RealMatrix mC = MatrixUtils.createRealMatrix(matrixC);
+		RealMatrix mD = MatrixUtils.createRealMatrix(matrixD);
+		RealMatrix mE = MatrixUtils.createRealMatrix(matrixE);
+		RealMatrix mO = MatrixUtils.createRealMatrix(originalMatrix);
+
+		EigenDecomposition mDetA = new EigenDecomposition(mA);
+		double determinantA = mDetA.getDeterminant();
+
+		EigenDecomposition mDetB = new EigenDecomposition(mB);
+		double determinantB = mDetB.getDeterminant();
+
+		EigenDecomposition mDetC = new EigenDecomposition(mC);
+		double determinantC = mDetC.getDeterminant();
+
+		EigenDecomposition mDetD = new EigenDecomposition(mD);
+		double determinantD = mDetD.getDeterminant();
+
+		EigenDecomposition mDetE = new EigenDecomposition(mE);
+		double determinantE = mDetE.getDeterminant();
+
+		EigenDecomposition mDet = new EigenDecomposition(mO);
+		double determinant = mDet.getDeterminant();
+
+		coeffA = determinantA / determinant;
+		coeffB = determinantB / determinant;
+		coeffC = determinantC / determinant;
+		coeffD = determinantD / determinant;
+		coeffE = determinantE / determinant;
+
+	}
+
+	public static double func(double x) {
+		return coeffA * Math.pow(x, 4) + coeffB * Math.pow(x, 3) + coeffC * Math.pow(x, 2) + coeffD * Math.pow(x, 1) + coeffE * Math.pow(x, 0);
 	}
 }
