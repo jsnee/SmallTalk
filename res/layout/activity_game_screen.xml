@@ -1,0 +1,73 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
+
+    <ImageView
+        android:id="@+id/gameBackground"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:scaleType="fitXY" />
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:alpha="0.94"
+        android:layout_above="@+id/controlPanel"
+        android:layout_centerInParent="true"
+        android:layout_centerVertical="true"
+        android:background="@drawable/game_question_box" >
+
+        <TextView
+            android:id="@+id/questionTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:text="Example Text"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textSize="@dimen/text_size" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/controlPanel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="5dp"
+        android:gravity="center" >
+
+        <ProgressBar
+            android:id="@+id/circularProgressBar"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="150dip"
+            android:layout_height="150dip"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginEnd="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginStart="0dp"
+            android:layout_marginLeft="0dp"
+            android:background="@drawable/microphone"
+            android:indeterminate="false"
+            android:max="100"
+            android:onClick="toggleListening"
+            android:progress="30"
+            android:progressDrawable="@drawable/progressbar"
+            android:rotation="-90" />
+
+        <ImageButton
+            android:id="@+id/imageButtonPlayNext"
+            android:layout_width="150dip"
+            android:layout_height="150dip"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/circularProgressBar"
+            android:background="@drawable/play"
+            android:onClick="playOnClick" />
+    </LinearLayout>
+
+</RelativeLayout>

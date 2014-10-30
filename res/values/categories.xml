@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="categories">
+        <item>This or That</item>
+        <item>Thought Provoking</item>
+        <item>Controversial</item>
+        <item>Experiences</item>
+        <item>Likes or Dislikes</item>
+    </string-array>
+    <string-array name="Likes_or_Dislikes">
+        <item>Favorite color?</item>
+        <item>Favorite subject in high school?</item>
+        <item>Favorite type of food?</item>
+        <item>Favorite drink?</item>
+        <item>Favorite actor/actress?</item>
+        <item>Favorite article of clothing?</item>
+        <item>Favorite family vacation growing up?</item>
+        <item>Favorite movie?</item>
+        <item>Favorite Baroque composer?</item>
+        <item>Favorite song?</item>
+        <item>Favorite day of the week?</item>
+        <item>Favorite quote in life?</item>
+        <item>Favorite childhood toy?</item>
+        <item>Favorite board game growing up?</item>
+        <item>Favorite TV show series?</item>
+        <item>Favorite way to spend a Saturday?</item>
+        <item>Favorite Egyptian god?</item>
+        <item>Favorite season?</item>
+        <item>Favorite band?</item>
+        <item>Favorite toaster pastry?</item>
+        <item>Favorite super hero?</item>
+        <item>Favorite album?</item>
+        <item>Favorite season?</item>
+        <item>Favorite time of day?</item>
+        <item>Favorite dessert?</item>
+        <item>Favorite sports team?</item>
+        <item>Favorite holiday?</item>
+        <item>Favorite book?</item>
+        <item>Favorite author?</item>
+        <item>Favorite meditation spot?</item>
+        <item>Favorite jelly bean flavor?</item>
+        <item>Do you like to read?</item>
+        <item>What’s your dream travel destination?</item>
+        <item>Are you a big fan of any major pro sports team?</item>
+        <item>Do you enjoy the outdoors?</item>
+    </string-array>
+    <string-array name="Experiences">
+        <item>What is the most embarrassing thing that happened to you in elementary school?</item>
+        <item>Coolest thing you have ever been for Halloween?</item>
+        <item>Can you fake an accent? If yes, would you show me?</item>
+        <item>Do you remember who taught you to ride a bike?</item>
+        <item>What is the worst injury you have ever had?</item>
+        <item>What skill or talent do you wish you had or were better at?</item>
+        <item>What is your biggest pet peeve?</item>
+        <item>What is the most spontaneous thing you have ever done?</item>
+        <item>When is your birthday?</item>
+        <item>Do you have any nicknames?</item>
+        <item>What\’s a funny memory from your childhood?</item>
+        <item>What\’s a fun quirk about you?</item>
+        <item>What is the most awkward date you\'ve ever been on?</item>
+        <item>What is the worst \"first-world\" problem?</item>
+        <item>Do you take selfies?</item>
+        <item>What is the funniest video you\'ve ever made or been in?</item>
+        <item>What are you a fanatic about?</item>
+        <item>What is something you are embarrassingly bad at?</item>
+        <item>What are three things on your bucket list?</item>
+        <item>Have you ever been in a car accident or gotten a speeding ticket?</item>
+        <item>What is the dumbest thing you\'ve ever been in trouble for?</item>
+        <item>What do you excel at that most people don\'t?</item>
+        <item>What is your biggest goal?</item>
+        <item>What is the best concert you\'ve ever seen?</item>
+        <item>Have you ever tried acting? </item>
+        <item>What was your best and worst subjects in high school?</item>
+        <item>What states have you all been to?</item>
+        <item>What is the best gift you\’ve ever received?</item>
+        <item>Do you collect anything? If so, what?</item>
+        <item>How did you arrive at the job you have now?</item>
+        <item>Have you ever volunteered?</item>
+        <item>Have you ever been outside of the country?</item>
+    </string-array>
+    <string-array name="This_or_That">
+        <item>Vanilla or Chocolate?</item>
+        <item>Mac or PC?</item>
+        <item>iPhone or Android?</item>
+        <item>Brunettes or blondes?</item>
+        <item>Sunrise or sunset?</item>
+        <item>Read or write?</item>
+        <item>Camping or cruise?</item>
+        <item>Filthy rich and sad or dirt poor and happy?</item>
+        <item>Deaf or blind?</item>
+        <item>No electricity or no running water?</item>
+        <item>Power of invisibility or telepathy?</item>
+        <item>Salty snacks or sweet desserts?</item>
+        <item>save money or spend it?</item>
+        <item>morning person or night owl?</item>
+        <item>Travel to the past or future?</item>
+        <item>Live in a world where you rule or where there were no problems?</item>
+        <item>live in a Harry Potter World or live the life of fame and wealth?</item>
+        <item>Be famous or be the friend of someone famous?</item>
+        <item>Fly or read minds?</item>
+        <item>Have everlasting fame and fortune or be with the love of your life?</item>
+        <item>find true love or $1 Million dollars?</item>
+        <item>Have more time or money?</item>
+        <item>Win the lottery or live twice as long?</item>
+        <item>Take a European sight-seeing vacation or relaxing Carribean vacation?</item>
+        <item>Be the richest person or immortal?</item>
+        <item>Be half your height or double your weight?</item>
+        <item>Piercings or tattoos?</item>
+        <item>Have a rewind button in your life or a pause?</item>
+        <item>Hakuna Matata or YOLO?</item>
+        <item>Have a zombie apololypse or have a World War 3?</item>
+        <item>Free starbucks for a year or free iTunes music forever?</item>
+        <item>Be able to always know when someone is lying or always get away with lying?</item>
+        <item>Be able to talk to animals or be able to speak all foreign languages?</item>
+        <item>Coffee or Tea?</item>
+        <item>Be able to talk like Yoda or breathe like Darth Vader?</item>
+        <item>Look like a laughing horse or toothless hungry cow?</item>
+        <item>Be Hermoine Granger or Bella from Twilight?</item>
+        <item>Manual or automatic tranmission (car)?</item>
+        <item>Glass half full or half empty?</item>
+        <item>Anime or comic book?</item>
+        <item>Be respected or feared?</item>
+        <item>Lyrics or instrumental?</item>
+        <item>Star Wars or Star Trek?</item>
+        <item>Fight 100 duck-sized horses or 1 horse-sized duck?</item>
+        <item>Wizard or Jedi?</item>
+        <item>Duct tape or super glue?</item>
+        <item>Eternal hiccups or perpetual impending sneeze?</item>
+        <item>Wear wet socks forever or only be allowed to bathe once a year?</item>
+        <item>Too hot or too cold?</item>
+    </string-array>
+    <string-array name="Thought_Provoking">
+        <item>If your house was on fire, what\’s the first thing you\’d grab to save?</item>
+        <item>If today was the last day of your life, how would you spend it?</item>
+        <item>What would you most regret not having/doing/being in life?</item>
+        <item>What would your ultimate retirement look like?</item>
+        <item>If you wrote a book, what would it be about?</item>
+        <item>Do you enjoy your job?</item>
+        <item>If you could live anywhere, where would it be?</item>
+        <item>Do you think horoscopes are ever accurate or that astrological signs matter?</item>
+        <item>How would your friends describe you in three words?</item>
+        <item>If you ruled the world, what would you change?</item>
+        <item>What are you passionate about?</item>
+        <item>What do you think your greatest strength is?</item>
+        <item>When you were younger, what did you want to be when you grew up?</item>
+        <item>If you just won $1 million, what would you do with it?</item>
+        <item>What was the worst job you\’ve ever had?</item>
+        <item>What is the best advice you\’ve ever received?</item>
+        <item>What is your proudest moment or greatest achievement of your life so far?</item>
+        <item>What is your biggest fear?</item>
+        <item>How did you meet your best friend?</item>
+        <item>What\’s your ideal vacation?</item>
+        <item>Where is your happy space?</item>
+        <item>What are two of your bucket list items?</item>
+        <item>What is the most thoughtful gift you\’ve ever given?</item>
+        <item>What have you learned from your biggest role model?</item>
+        <item>Do you believe in aliens?</item>
+        <item>Do you believe in divine intervention?</item>
+        <item>Do you believe everything happens for a reason?</item>
+        <item>Do you believe more in organized religion or personal spirituality?</item>
+        <item>How do you relieve stress?</item>
+        <item>What factors do you think cause people to most often misunderstand others?</item>
+        <item>What are three items you would take with you if your house was on fire?</item>
+        <item>Where do you go to get away?</item>
+        <item>What is your oddly-specific super power?</item>
+        <item>What is your dream job?</item>
+    </string-array>
+    <string-array name="Controversial">
+        <item>Should the government eliminate food stamps and welfare checks?</item>
+        <item>Are you pro-choice or pro-life?</item>
+        <item>Do you think legalizing marijuana would be positive?</item>
+        <item>What aspects of feminism do you believe in most strongly?</item>
+        <item>What are three things you believe the government is hiding from us?</item>
+        <item>Do you believe in the death penalty?</item>
+        <item>What would the U.S. look like as a socialist country?</item>
+        <item>What problems, if any, do you see with capitalism?</item>
+        <item>When is it OK to lie?</item>
+        <item>What kind of immigration policy would you draft if it was up to you?</item>
+        <item>Do you think the media are ethical? </item>
+        <item>Do you think progressive genetic experiements are positive or negative for science?</item>
+        <item>Do you think long prison sentences for drugs is beneficial for society?</item>
+        <item>What has been the government\'s largest mistake in the past decade?</item>
+        <item>Do you believe in secret societies that influence world policy?</item>
+        <item>What have been wars you think the United States was justified fighting?</item>
+        <item>What, if any, is the solution to the U.S.\'s skewed distribution of wealth?</item>
+        <item>Do you think gender stereotpyes and expectations will ever change?</item>
+        <item>Does technology bring us closer together or push us apart?</item>
+        <item>Would you put personal privacy or national safety first?</item>
+        <item>Is affirmative action enough repartition for past racism?</item>
+        <item>Should state government be using lottery money for other purposes?</item>
+        <item>If you could solve a single problem in the world, what would it be?</item>
+        <item>Do you think there is an unfair pay gap among genders?</item>
+        <item>Was nuclear aggression necessary in WWII?</item>
+        <item>Is there life after death?</item>
+        <item>Is there life on other planets?</item>
+        <item>Is it ethical to eat meat?</item>
+        <item>Should murders and other brutal criminals be executed?</item>
+        <item>Does God exist?</item>
+        <item>Is animal experimentation justified?</item>
+        <item>Should drugs be legal?</item>
+        <item>Should gay marriage be legal?</item>
+        <item>Should AIDS patients be able to receive organ transplants?</item>
+        <item>Do guns make society safer or more violent?</item>
+        <item>Is torture ever justified?</item>
+        <item>How do you feel about eugenics?</item>
+        <item>Is our election process fair?</item>
+        <item>Is euthanasia acceptable?</item>
+        <item>Is evolution or creationism the truth?</item>
+    </string-array>
+
+</resources>
