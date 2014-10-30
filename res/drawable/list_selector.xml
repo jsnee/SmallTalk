@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<selector xmlns:android="http://schemas.android.com/apk/res/android">
-
-    <item android:drawable="@drawable/frontpage_topic_button_green_small" android:state_focused="true" android:state_pressed="true"/>
-    <item><shape android:visible="false" />
-    </item>
-
-</selector>
