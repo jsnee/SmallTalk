@@ -124,6 +124,11 @@ public class GameScreen extends Activity implements AmbientNoiseCaptureDialogFra
 						int progressLevel = (int) (audioValue / unitValue * 100);
 						progressLevel = (progressLevel > 100 ? 100:progressLevel);
 						_progressBar.setProgress(progressLevel);
+						
+						if (audioLevels.size() == 100) {
+							processList(audioLevels);
+						}
+						
 						if (isDetectingNoise) {
 							if (audioValue > maxAudioValue) {
 								maxAudioValue = audioValue;
@@ -137,8 +142,10 @@ public class GameScreen extends Activity implements AmbientNoiseCaptureDialogFra
 								appSettings.setWeightedAverageAudioValue(0);
 								checkTextToSpeechEnabled();
 							}
-						} else {
-							if (progressLevel < appSettings.getThresholdRatio() && isPlaying) {
+						} 
+						else {
+							//if (progressLevel < appSettings.getThresholdRatio() && isPlaying) {
+							if ((int) (volumeFunc(105) / unitValue * 100) < appSettings.getThresholdRatio() && isPlaying) {
 								if (!isAppMakingNoise()) {
 									quietTickCounts++;
 									totalContinuousQuietTickCounts++;
@@ -684,7 +691,7 @@ public class GameScreen extends Activity implements AmbientNoiseCaptureDialogFra
 
 	}
 
-	public static double func(double x) {
+	public static double volumeFunc(double x) {
 		return coeffA * Math.pow(x, 4) + coeffB * Math.pow(x, 3) + coeffC * Math.pow(x, 2) + coeffD * Math.pow(x, 1) + coeffE * Math.pow(x, 0);
 	}
 }
