@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
 import android.content.Intent;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -24,6 +26,7 @@ public class MainActivity extends Activity {
 	private List<QuestionCategory> questionCategories = new ArrayList<QuestionCategory>();
 	protected CategoryListAdapter categoryAdapter;
 	public final static String EXTRA_CATEGORY = "com.example.smalltalk.CATEGORY";
+	public static AlertDialog loadingDialog;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -78,6 +81,9 @@ public class MainActivity extends Activity {
 	}
 	
 	protected void initializeGameScreen(String selectedCategory) {
+		Builder initDialogBuilder = new AlertDialog.Builder(this).setTitle("Loading").setMessage("Please wait while we load your questions...").setIcon(android.R.drawable.ic_popup_sync);
+		loadingDialog = initDialogBuilder.create();
+		loadingDialog.show();
 		Intent intent = new Intent(this, GameScreen.class);
 		GameScreen.preserveCategory = selectedCategory;
 		startActivity(intent);
