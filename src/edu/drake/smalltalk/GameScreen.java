@@ -1,16 +1,9 @@
 package edu.drake.smalltalk;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
 import java.util.Locale;
-import java.util.Scanner;
-
-import org.apache.commons.math3.linear.EigenDecomposition;
-import org.apache.commons.math3.linear.MatrixUtils;
-import org.apache.commons.math3.linear.RealMatrix;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -66,11 +59,15 @@ public class GameScreen extends Activity implements AmbientNoiseCaptureDialogFra
 	protected boolean textToSpeechEnabled = false;
 	protected AlertDialog initDialog;
 	protected Thread mainThread;
-	protected static ArrayList<Integer> audioLevels = new ArrayList<Integer>();
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		Intent intent = getIntent();
+		if (MainActivity.loadingDialog != null) {
+			MainActivity.loadingDialog.dismiss();
+			MainActivity.loadingDialog = null;
+		}
 		QuestionCategory selectedCategory = new QuestionCategory(preserveCategory);
 		setContentView(R.layout.activity_game_screen);
 
@@ -80,6 +77,7 @@ public class GameScreen extends Activity implements AmbientNoiseCaptureDialogFra
 
 		loadQuestions(selectedCategory.categoryName);
 		shuffleQuestions();
+		currentQuestionIndex = 0;
 
 		_progressBar = (ProgressBar) findViewById(R.id.circularProgressBar);
 		_progressBar.setProgress(0);
@@ -89,6 +87,7 @@ public class GameScreen extends Activity implements AmbientNoiseCaptureDialogFra
 
 		//initializeMainThread();
 
+		checkTextToSpeechEnabled();
 		startListening();
 		displayInstructionsText();
 
@@ -99,11 +98,19 @@ public class GameScreen extends Activity implements AmbientNoiseCaptureDialogFra
 		noiseDetectionDialog = new AmbientNoiseCaptureDialogFragment();
 		noiseDetectionDialog.show(getFragmentManager(), "noise");
 	}
+	
+	public void onPause() {
+		super.onPause();
+		stopPlaying();
+	}
 
 	public void onDestroy() {
 		super.onDestroy();
 		stopTextToSpeech();
 		stopPlaying();
+		if (isListening) {
+			stopListening();
+		}
 	}
 	
 	public void initializeMainThread() {
@@ -113,13 +120,6 @@ public class GameScreen extends Activity implements AmbientNoiseCaptureDialogFra
 					while(isListening) {
 
 						audioValue = mediaRecorder.getMaxAmplitude();
-						if (audioLevels.size() < 100) {
-							audioLevels.add(audioValue);
-						}
-						else {
-							audioLevels.remove(0);
-							audioLevels.add(audioValue);
-						}
 						double unitValue = (maxAudioValue - audioTolerance);
 						int progressLevel = (int) (audioValue / unitValue * 100);
 						progressLevel = (progressLevel > 100 ? 100:progressLevel);
@@ -140,7 +140,7 @@ public class GameScreen extends Activity implements AmbientNoiseCaptureDialogFra
 								audioTolerance = (int) (appSettings.getWeightedAverageAudioValue());
 								noiseDetectionDialog.dismiss();
 								appSettings.setWeightedAverageAudioValue(0);
-								checkTextToSpeechEnabled();
+								//checkTextToSpeechEnabled();
 							}
 						} 
 						else {
@@ -152,7 +152,6 @@ public class GameScreen extends Activity implements AmbientNoiseCaptureDialogFra
 								}
 								wasLastTickQuiet = true;
 								int quietSeconds = quietTickCounts * millisecondsPerTick / 1000;
-								System.out.println("Detected Silence for " + quietSeconds + " seconds");
 								if (quietSeconds >= appSettings.getTimerSeconds()) {
 									quietTickCounts = 0;
 									wasLastTickQuiet = false;
@@ -178,6 +177,9 @@ public class GameScreen extends Activity implements AmbientNoiseCaptureDialogFra
 								@Override
 								public void run() {
 									stopPlaying();
+									if (isListening) {
+										stopListening();
+									}
 								}
 							});
 						}
@@ -236,7 +238,6 @@ public class GameScreen extends Activity implements AmbientNoiseCaptureDialogFra
 	protected void speakText() {
 		if (textToSpeechEnabled) {
 			String toSpeak = ((TextView)findViewById(R.id.questionTextView)).getText().toString();
-			System.out.println("Trying to say: " + toSpeak);
 			speechObj.speak(toSpeak, TextToSpeech.QUEUE_FLUSH, null);
 		}
 	}
@@ -290,7 +291,6 @@ public class GameScreen extends Activity implements AmbientNoiseCaptureDialogFra
 	}
 	
 	private void loadQuestionsFromCategory(String categoryName) {
-		System.out.println("Category: " + categoryName);
 		for (String eachQuestion : getResources().getStringArray(getResources().getIdentifier(categoryName, "array", "edu.drake.smalltalk"))) {
 			questions.add(eachQuestion);
 		}
@@ -369,8 +369,8 @@ public class GameScreen extends Activity implements AmbientNoiseCaptureDialogFra
 	public void startPlaying() {
 		resetStartPlayingTime();
 		isPlaying = true;
-		shuffleQuestions();
-		currentQuestionIndex = 0;
+		//shuffleQuestions();
+		//currentQuestionIndex = 0;
 		updateQuestionDisplay();
 		speakText();
 	}
@@ -379,9 +379,6 @@ public class GameScreen extends Activity implements AmbientNoiseCaptureDialogFra
 		isPlaying = false;
 		disableKeepScreenAwake();
 		displayStartPlayingButtion();
-		if (isListening) {
-			stopListening();
-		}
 	}
 
 	protected void resetStartPlayingTime() {
@@ -435,7 +432,7 @@ public class GameScreen extends Activity implements AmbientNoiseCaptureDialogFra
 			mediaRecorder.start();
 			isListening = true;
 		} catch (Exception e) {
-			Toast.makeText(getApplicationContext(), "Error :: " + e.getMessage(), Toast.LENGTH_LONG).show();
+			Toast.makeText(getApplicationContext(), "Error :: Failed to initialize recording.", Toast.LENGTH_LONG).show();
 		}
 		new Thread(new Runnable() {
 			public void run() {
@@ -453,7 +450,7 @@ public class GameScreen extends Activity implements AmbientNoiseCaptureDialogFra
 						if (isDetectingNoise) {
 							appSettings.refineWeightedAverageAudioValue(audioValue);
 
-							if (System.currentTimeMillis() > beginDetectionTime + 10000) {
+							if (System.currentTimeMillis() > beginDetectionTime + 5000) {
 								isDetectingNoise = false;
 								audioTolerance = (int) (appSettings.getWeightedAverageAudioValue());
 								noiseDetectionDialog.dismiss();
@@ -468,7 +465,6 @@ public class GameScreen extends Activity implements AmbientNoiseCaptureDialogFra
 								}
 								wasLastTickQuiet = true;
 								int quietSeconds = quietTickCounts * millisecondsPerTick / 1000;
-								System.out.println("Detected Silence for " + quietSeconds + " seconds");
 								if (quietSeconds >= appSettings.getTimerSeconds()) {
 									quietTickCounts = 0;
 									wasLastTickQuiet = false;
@@ -551,6 +547,7 @@ public class GameScreen extends Activity implements AmbientNoiseCaptureDialogFra
 		switch(item.getItemId()) {
 		case  R.id.settings:
 			//Settings selected
+			stopPlaying();
 			startActivity(new Intent(this, SettingScreen.class));
 			return true;	
 		case R.id.recalibrateMic:
@@ -580,6 +577,7 @@ public class GameScreen extends Activity implements AmbientNoiseCaptureDialogFra
 		isDetectingNoise = false;
 		checkTextToSpeechEnabled();
 	}
+<<<<<<< HEAD
 	
 	public static double coeffA, coeffB, coeffC, coeffD, coeffE;
 
@@ -694,4 +692,6 @@ public class GameScreen extends Activity implements AmbientNoiseCaptureDialogFra
 	public static double volumeFunc(double x) {
 		return coeffA * Math.pow(x, 4) + coeffB * Math.pow(x, 3) + coeffC * Math.pow(x, 2) + coeffD * Math.pow(x, 1) + coeffE * Math.pow(x, 0);
 	}
+=======
+>>>>>>> 95fdd8823fad1351009e347f5c2e05082eb275ca
 }

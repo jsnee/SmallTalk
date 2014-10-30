@@ -16,7 +16,7 @@ public class AmbientNoiseCaptureDialogFragment extends DialogFragment {
 	public Dialog onCreateDialog(Bundle savedInstanceState) {
 		// Use the Builder class for convenient dialog construction
 		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-		builder.setMessage(R.string.dialog_capturing_noise)
+		builder.setMessage(R.string.dialog_capturing_noise).setTitle("Hang On....")
 		.setNegativeButton(R.string.dialog_noisecap_cancel, new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int id) {
 				mListener.onDialogNegativeClick(AmbientNoiseCaptureDialogFragment.this);
